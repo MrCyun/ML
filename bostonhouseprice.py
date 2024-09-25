@@ -1,11 +1,10 @@
 import numpy as np
 import pandas as pd
-
 import linearregression
 import matplotlib.pyplot as plt
 
+#数据准备
 data = pd.read_csv("housing-data.csv", header=None)
-
 row_num = data.shape[0]
 col_num = len(data.iloc[0, 0].split())
 datax = np.empty([row_num, col_num - 1])
@@ -15,14 +14,17 @@ for i in range(0, row_num):
     datax[i] = np.array(num[0:-1])
     datay[i] = np.array(num[-1])
 
+#特征处理
 maxdatax = datax.max(axis=0)
 mindatax = datax.min(axis=0)
 datax = (datax - mindatax) / (maxdatax - mindatax)
 
+#调用算法
 model = linearregression.LinearRegression()
 model.fit(datax,datay,learning_rate=0.5,lamda=0.00003)
 predict_data = model.predict(datax)
 
+#画图
 t = np.arange(len(predict_data))
 plt.figure()
 plt.scatter(t,datay,color ='g',label="real value",s=30)
